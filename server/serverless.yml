@@ -1,0 +1,54 @@
+service: chat-chat-demo-server
+frameworkVersion: "3"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-prune-plugin
+  - serverless-domain-manager
+  - serverless-plugin-warmup
+
+package:
+  exclude:
+    - node_modules/**
+    - .venv/**
+    - alembic/**
+
+provider:
+  name: aws
+  runtime: python3.10
+  stage: ${opt:stage, 'dev'}
+  environment:
+    env: ${file(./serverless_config_${self:provider.stage}.json):ENV}
+  vpc:
+    securityGroupIds: ${file(./serverless_config_${self:provider.stage}.json):VPC_SECURITY_GROUP_IDS}
+    subnetIds: ${file(./serverless_config_${self:provider.stage}.json):VPC_SUBNET_IDS}
+
+
+custom:
+  pythonRequirements:
+    requirePoetryLockFile: true
+    slim: true
+    zip: true
+    dockerizePip: non-linux  # needed for psycopg2
+  prune:
+    automatic: true
+    number: 3
+  customDomain:
+    domainName: ${file(./serverless_config_${self:provider.stage}.json):CUSTOM_DOMAIN}
+    basePath: ""
+    endpointType: "regional"
+  warmup:
+    default:
+      enabled: true
+      concurrency: 4
+
+functions:
+  app:
+    handler: app.lambda_handler
+    timeout: 90
+    url: true # use a function URL to get around 30 second timeout issues with API Gateway
+    events:
+      - http:
+          method: any
+          path: /{proxy+}
+  

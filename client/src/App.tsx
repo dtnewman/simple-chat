@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { ChatBubble } from "@/components/ui/chat-bubble"
 import { SendHorizontal } from "lucide-react"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { sendChat, ChatMessage } from "@/lib/api"
+
 interface Message {
   id: string
   content: string
@@ -21,6 +23,7 @@ function App() {
   ])
   const [input, setInput] = useState("")
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -30,29 +33,42 @@ function App() {
     scrollToBottom()
   }, [messages])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
 
-    // Add user message
+    // Clear input immediately
+    setInput("")
+    setIsLoading(true)
+
     const userMessage: Message = {
       id: Date.now().toString(),
-      content: input,
+      content: input.trim(),
       role: "user"
     }
     setMessages(prev => [...prev, userMessage])
 
-    // Add mock response (replace this with actual API call later)
-    const assistantMessage: Message = {
-      id: (Date.now() + 1).toString(),
-      content: "This is a mock response. Replace this with actual API integration.",
-      role: "assistant"
-    }
-    setTimeout(() => {
-      setMessages(prev => [...prev, assistantMessage])
-    }, 1000)
+    // Convert messages to ChatMessage format and send to API
+    try {
+      const chatHistory: ChatMessage[] = [...messages, userMessage].map(msg => ({
+        sender: msg.role === "user" ? "user" : "Bot",
+        message: msg.content
+      }))
 
-    setInput("")
+      const response = await sendChat(chatHistory)
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: response.model_output,
+        role: "assistant"
+      }
+      setMessages(prev => [...prev, assistantMessage])
+    } catch (error) {
+      console.error("Failed to get chat response:", error)
+      // Optionally add error handling UI here
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -72,6 +88,15 @@ function App() {
                   {message.content}
                 </ChatBubble>
               ))}
+              {isLoading && (
+                <ChatBubble variant="received">
+                  <div className="flex gap-1 items-center">
+                    <span className="w-1 h-1 rounded-full bg-current animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-1 h-1 rounded-full bg-current animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-1 h-1 rounded-full bg-current animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                  </div>
+                </ChatBubble>
+              )}
               <div ref={messagesEndRef} />
             </div>
 
@@ -82,7 +107,7 @@ function App() {
                 placeholder="Type a message..."
                 className="flex-1"
               />
-              <Button type="submit" size="icon">
+              <Button type="submit" size="icon" disabled={!input.trim()}>
                 <SendHorizontal className="h-4 w-4" />
               </Button>
             </form>
