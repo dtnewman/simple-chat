@@ -1,5 +1,5 @@
 {
-  "name": "carma",
+  "name": "chai-chat-demo",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "sync": "aws s3 sync dist/ s3://chai-chat-demo-frontend-site-dev --profile default --delete",
-    "invalidate": "aws cloudfront create-invalidation --distribution-id E2I1V85BWC0LHU --paths '/*' --profile default > invalidation.log",
+    "invalidate": "aws cloudfront create-invalidation --distribution-id E1LNX5TBPYNG1Q --paths '/*' --profile default > invalidation.log",
     "deploy": "npm run sync && npm run invalidate",
     "cloudformation:package": "aws cloudformation package --template-file cloudfront-template.yaml --s3-bucket chai-chat-demo-frontend-site--dev --output-template-file packaged-cloudfront-template-dev.yaml --profile default",
     "cloudformation:deploy": "aws cloudformation deploy --template-file packaged-cloudfront-template-dev.yaml --stack-name chai-chat-demo-frontend-stack-dev --profile default --parameter-overrides Environment=dev",
