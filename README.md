@@ -2,6 +2,9 @@
 
 This is a basic chat app. More info here soon! Go [here](https://chai-chat-demo.foobar.dev/) to see the demo.
 
+![Chat App Screenshot](./screenshots/demo.png)
+
+
 ## Setup
 
 ### Backend
