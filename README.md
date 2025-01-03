@@ -6,7 +6,7 @@ This is a basic chat app. More info here soon! Go [here](https://chai-chat-demo.
 
 ### Backend
 
-More info coming soon...
+See [server/README.md](server/README.md) for more info.
 
 
 ### Frontend
