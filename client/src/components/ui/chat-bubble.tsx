@@ -19,7 +19,7 @@ const ChatBubble = React.forwardRef<HTMLDivElement, ChatBubbleProps>(
             >
                 <div
                     className={cn(
-                        "rounded-lg px-4 py-2 max-w-[80%]",
+                        "rounded-lg px-3 py-2 max-w-[95%] sm:max-w-[80%]",
                         variant === "sent"
                             ? "bg-primary text-primary-foreground"
                             : "bg-muted"

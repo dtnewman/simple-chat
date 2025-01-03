@@ -81,8 +81,8 @@ function App() {
   }
 
   return (
-    <main className="w-full min-h-screen p-4">
-      <div className="mx-auto w-[900px] min-h-[500px] max-h-[900px] h-[90vh] flex flex-col overflow-hidden mt-8">
+    <main className="w-full min-h-screen p-2 sm:p-4">
+      <div className="mx-auto max-w-[900px] min-h-[500px] max-h-[900px] h-[90vh] flex flex-col overflow-hidden mt-8">
         <div className="flex justify-end mb-4">
           <ThemeToggle />
         </div>
