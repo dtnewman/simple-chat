@@ -1,6 +1,6 @@
 # Chat App
 
-This is a basic chat app
+This is a basic chat app. More info here soon! Go [here](https://github.com/dtnewman/simple-chat) to see the demo.
 
 ## Setup
 
