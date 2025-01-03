@@ -1,0 +1,82 @@
+Parameters:
+  Environment:
+    Description: Deployment environment
+    Type: String
+    Default: dev
+    AllowedValues:
+    - dev
+    - prd
+    ConstraintDescription: Must be either dev or prd.
+Conditions:
+  IsProduction:
+    Fn::Equals:
+    - Ref: Environment
+    - prd
+Resources:
+  ChaiChatDemoFrontendSite:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Fn::Sub: chai-chat-demo-frontend-site-${Environment}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+  ChaiChatDemoFrontendSitePolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: ChaiChatDemoFrontendSite
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal: '*'
+          Action: s3:GetObject
+          Resource:
+            Fn::Sub: arn:aws:s3:::${ChaiChatDemoFrontendSite}/*
+  ChaiChatDemoCloudFront:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - Fn::Sub: chai-chat-demo.foobar.dev
+        Origins:
+        - DomainName:
+            Fn::Sub: ${ChaiChatDemoFrontendSite}.s3-website-${AWS::Region}.amazonaws.com
+          Id: ReactApp
+          CustomOriginConfig:
+            HTTPPort: 80
+            HTTPSPort: 443
+            OriginProtocolPolicy: http-only
+        Comment:
+          Fn::Sub: chai-chat-demo (${Environment})
+        Enabled: true
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - GET
+          - HEAD
+          TargetOriginId: ReactApp
+          ForwardedValues:
+            QueryString: false
+          ViewerProtocolPolicy: redirect-to-https
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:868085652288:certificate/3dcb9b40-349b-4e0d-9368-1c6dd8fa610d
+          SslSupportMethod: sni-only
+  MyDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: Z00331582MFBUMN4BZ0YE
+      Name:
+        Fn::Sub: chai-chat-demo.foobar.dev
+      Type: A
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2
+        DNSName:
+          Fn::GetAtt:
+          - ChaiChatDemoCloudFront
+          - DomainName
