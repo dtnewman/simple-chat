@@ -13,6 +13,15 @@ interface Message {
   role: "user" | "assistant"
 }
 
+const parseMarkdownItalics = (text: string) => {
+  return text.split(/(\*[^\*]+\*)/).map((part, index) => {
+    if (part.startsWith('*') && part.endsWith('*')) {
+      return <em key={index}>{part.slice(1, -1)}</em>;
+    }
+    return part;
+  });
+};
+
 function App() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -74,7 +83,7 @@ function App() {
   return (
     <main className="w-full min-h-screen p-4">
       <div className="mx-auto w-[900px] min-h-[500px] max-h-[900px] h-[90vh] flex flex-col overflow-hidden mt-8">
-        <div className="flex justify-end">
+        <div className="flex justify-end mb-4">
           <ThemeToggle />
         </div>
         <Card className="flex-1 flex flex-col overflow-hidden border">
@@ -85,7 +94,7 @@ function App() {
                   key={message.id}
                   variant={message.role === "user" ? "sent" : "received"}
                 >
-                  {message.content}
+                  {parseMarkdownItalics(message.content)}
                 </ChatBubble>
               ))}
               {isLoading && (
