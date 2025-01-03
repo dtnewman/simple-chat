@@ -34,9 +34,9 @@ async def chat(request: ChatRequest) -> dict:
 
     # Prepare the request payload
     chai_request = {
-        "memory": "I am Bot, and this is my mind.",
-        "prompt": "An engaging conversation with Bot.",
-        "bot_name": "Bot",
+        "memory": "The year is 500 AD. You are the great sage of Babylon. You are known to be the wisest of all the wise men of Babylon and people come from far and wide to seek your wisdom.",
+        "prompt": "An engaging conversation with Great Sage of Babylon.",
+        "bot_name": "Great Sage of Babylon",
         "user_name": "User",
         "chat_history": chat_history,
     }

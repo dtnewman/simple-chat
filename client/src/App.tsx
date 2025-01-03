@@ -26,7 +26,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
-      content: "Hello! How can I help you today?",
+      content: "*The great sage of Babylon looks in your direction.* What brings you here?",
       role: "assistant"
     }
   ])
