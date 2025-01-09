@@ -10,7 +10,7 @@ The second one has a more fully fleshed out evaluation with cleaner code:
 
 [evaluate_intelligence2.ipynb](evaluate_intelligence2.ipynb)
 
-I would recommend lookking at the second notebook first.
+I would recommend looking at the second notebook first.
 
 Notably, in the second notebook, I updated the testing framework to closely match ideas from the [SimpleQA framework](https://openai.com/index/introducing-simpleqa/) recently released by OpenAI. The idea is that rather than trying to evaluate how the models answer vague questions, we focus on simple (though not necessarily easy) questions with objective answers.
 
