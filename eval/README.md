@@ -19,6 +19,7 @@ Notably, in the second notebook, I updated the testing framework to closely matc
 The results are in the second notebook. From my latest run, I got these scores:
 
 Chai: 11 correct, 9 incorrect, 0 not attempted
+
 Llama: 12 correct, 8 incorrect, 0 not attempted
 
 The results are not statistically significant... the sample size is too small and the questions are highly correlated. The goal was to show how I would develop an evaluation framework (at least in the few hours that I had to work on this), not to get a statistically significant result.
