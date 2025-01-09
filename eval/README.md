@@ -39,3 +39,13 @@ My evaluation focused on knowledge, but intelligence can be defined in many ways
 I used GPT-4o to generate questions and answers. This assumes that the questions and answer are actually correct: It would probably be helpful to evaluate the questions and answers against other frontier models (e.g. Claude Opus, Llama 405B) to ensure that the questions and answers are actually correct. If trying to evaluate the relative intelligence of two models, completely incorrect question/answer pairs may not be too harmful (since both models will likely be incorrect), but it would be problematic if an question has multiple reasonable answers and the generated question/answer pair doesn't list all of the answers.
 
 
+### Setup
+
+I ran this with Python 3.13.1. To install the dependencies, run: 
+
+```
+pip install -r requirements.txt
+```
+
+You'll also need to generate a `.env` file modeled after [.env.example](.env.example) where I store API keys.
+
